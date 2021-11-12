@@ -4,12 +4,10 @@ import se.iths.entity.Student;
 import se.iths.service.StudentService;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("students")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -24,6 +22,13 @@ public class StudentRest {
     public Response addStudent(Student student){
         studentService.addStudent(student);
         return Response.ok(student).build();
+    }
+
+    @Path("getallStudents")
+    @GET
+    public Response getAllStudents(){
+        List<Student> foundStudents = studentService.getAllStudents();
+        return Response.ok(foundStudents).build();
     }
 
 }

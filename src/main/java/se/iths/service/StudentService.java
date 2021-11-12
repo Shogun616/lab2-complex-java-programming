@@ -5,6 +5,7 @@ import se.iths.entity.Student;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 public class StudentService {
@@ -14,5 +15,13 @@ public class StudentService {
 
     public void addStudent(Student student){
         entityManager.persist(student);
+    }
+
+    public Student findStudentByLastName(String lastName){
+        return entityManager.find(Student.class, lastName);
+    }
+
+    public List<Student> getAllStudents(){
+        return entityManager.createQuery("select s from Student s", Student.class).getResultList();
     }
 }

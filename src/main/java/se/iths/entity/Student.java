@@ -19,11 +19,11 @@ public class Student {
     private String firstName;
 
     @NotEmpty
-    @Size(min = 2)
+    @Size(min = 3)
     private String lastName;
 
     @NotEmpty
-    @Size(min = 2)
+    @Size(min = 5)
     private String email;
 
     private String phoneNumber;
