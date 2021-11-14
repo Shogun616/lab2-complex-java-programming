@@ -27,8 +27,39 @@ public class StudentRest {
     @Path("getallStudents")
     @GET
     public Response getAllStudents(){
-        List<Student> foundStudents = studentService.getAllStudents();
+        List<Student> foundStudents = studentService.getAllStudentsByLastName();
         return Response.ok(foundStudents).build();
     }
 
+    @Path("{lastName}")
+    @GET
+    public Response getStudentsByLastName(@PathParam("lastName") String lastName){
+        Student foundStudent = studentService.findStudentByLastName(lastName);
+        if(foundStudent == null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("Student with lastname " + lastName + " was not found.")
+                    .type(MediaType.APPLICATION_JSON).build());
+        }
+        return Response.ok(foundStudent).build();
+    }
+
+    @Path("updateStudent")
+    @PUT
+    public Response updateStudent(Student student){
+        studentService.updateStudent(student);
+        return Response.ok(student).build();
+    }
+
+    @Path("{id}")
+    @DELETE
+    public Response deleteStudent(@PathParam("id") Long id){
+        Student foundStudent = studentService.findStudentById(id);
+        studentService.deleteStudent(id);
+        if(foundStudent == null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("Student with ID " + id + " was not found.")
+                    .type(MediaType.APPLICATION_JSON).build());
+        }
+        return Response.ok().build();
+    }
 }

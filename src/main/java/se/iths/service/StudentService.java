@@ -21,7 +21,20 @@ public class StudentService {
         return entityManager.find(Student.class, lastName);
     }
 
-    public List<Student> getAllStudents(){
+    public Student findStudentById(Long id){
+        return entityManager.find(Student.class, id);
+    }
+
+    public List<Student> getAllStudentsByLastName(){
         return entityManager.createQuery("select s from Student s", Student.class).getResultList();
+    }
+
+    public void updateStudent(Student student){
+        entityManager.merge(student);
+    }
+
+    public void deleteStudent(Long id){
+        Student foundStudent = entityManager.find(Student.class, id);
+        entityManager.remove(foundStudent);
     }
 }
