@@ -24,33 +24,18 @@ public class StudentRest {
         return Response.ok(student).build();
     }
 
-    @Path("getallStudents")
+    @Path("getStudent/{id}")
     @GET
-    public Response getAllStudents(){
-        List<Student> foundStudents = studentService.getAllStudentsByLastName();
-        return Response.ok(foundStudents).build();
-    }
-
-    @Path("{lastName}")
-    @GET
-    public Response getStudentsByLastName(@PathParam("lastName") String lastName){
-        Student foundStudent = studentService.findStudentByLastName(lastName);
-        if(foundStudent == null){
+    public Response getStudent(@PathParam("id") Long id){
+        Student foundStudent = studentService.findStudentById(id);
+        if (foundStudent == null) {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("Student with lastname " + lastName + " was not found.")
-                    .type(MediaType.APPLICATION_JSON).build());
+                    .entity("Student with ID " + id + " was not found.").type(MediaType.APPLICATION_JSON).build());
         }
         return Response.ok(foundStudent).build();
     }
 
-    @Path("updateStudent")
-    @PUT
-    public Response updateStudent(Student student){
-        studentService.updateStudent(student);
-        return Response.ok(student).build();
-    }
-
-    @Path("{id}")
+    @Path("deleteStudent/{id}")
     @DELETE
     public Response deleteStudent(@PathParam("id") Long id){
         Student foundStudent = studentService.findStudentById(id);
@@ -61,5 +46,31 @@ public class StudentRest {
                     .type(MediaType.APPLICATION_JSON).build());
         }
         return Response.ok().build();
+    }
+
+    @Path("getallStudents")
+    @GET
+    public Response getAllStudents(){
+        List<Student> foundStudents = studentService.getAllStudents();
+        if(foundStudents == null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("No data available.")
+                    .type(MediaType.APPLICATION_JSON).build());
+        }
+        return Response.ok(foundStudents).build();
+    }
+
+    @Path("updateStudent/{id}")
+    @PUT
+    public Response updateStudent(@PathParam("id") Long id, Student student){
+        studentService.updateStudent(student);
+        return Response.ok(student).build();
+    }
+
+    @Path("getStudentByLastname")
+    @GET
+    public Response getStudentByLastname(@QueryParam("lastName") String lastName){
+        String responseString = "List of student with lastname: " + lastName;
+        return Response.ok(responseString).build();
     }
 }

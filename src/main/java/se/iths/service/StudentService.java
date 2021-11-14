@@ -17,16 +17,8 @@ public class StudentService {
         entityManager.persist(student);
     }
 
-    public Student findStudentByLastName(String lastName){
-        return entityManager.find(Student.class, lastName);
-    }
-
     public Student findStudentById(Long id){
         return entityManager.find(Student.class, id);
-    }
-
-    public List<Student> getAllStudentsByLastName(){
-        return entityManager.createQuery("select s from Student s", Student.class).getResultList();
     }
 
     public void updateStudent(Student student){
@@ -36,5 +28,9 @@ public class StudentService {
     public void deleteStudent(Long id){
         Student foundStudent = entityManager.find(Student.class, id);
         entityManager.remove(foundStudent);
+    }
+
+    public List<Student> getAllStudents(){
+        return entityManager.createQuery("select s from Student s", Student.class).getResultList();
     }
 }
