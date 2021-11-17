@@ -9,7 +9,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Filter;
 import java.util.stream.Collectors;
 
 @Path("students")
@@ -23,13 +22,15 @@ public class StudentRest {
     @Path("newStudent")
     @POST
     public Response addStudent(Student student){
-        studentService.addStudent(student);
-//        if (){
-//            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-//                    .entity("Email " +  " is already taken").type(MediaType.APPLICATION_JSON).build());
-//        }
-        String msg = "A student has been added to the database";
-        return Response.ok(student).entity(msg).build();
+        if (student.getEmail().contains("@mail.com")){
+            studentService.addStudent(student);
+            String msg = "Student with " + student.getEmail() + " has been added.";
+            return Response.ok().entity(msg).build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Invalid email")
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
     }
 
     @Path("getStudent/{id}")
@@ -82,12 +83,14 @@ public class StudentRest {
 
     @Path("deleteStudent/{id}")
     @DELETE
-    public Response deleteStudent(@PathParam("id") Long id, Student student){
+    public Response deleteStudent(@PathParam("id") Long id){
+        Student foundStudent = studentService.findStudentById(id);
+        if (foundStudent == null){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Student with ID " + id + " was not found.")
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
         studentService.deleteStudent(id);
-//        if(student.getId() == null){
-//            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-//                    .entity("Student with ID " + id + " was not found.").type(MediaType.APPLICATION_JSON).build());
-//        }
         String msg = "Student with ID " + id + " has been removed.";
         return Response.ok().entity(msg).build();
     }
