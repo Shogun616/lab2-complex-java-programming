@@ -73,11 +73,13 @@ public class StudentRest {
     @Path("updateStudent/{id}")
     @PUT
     public Response updateStudent(@PathParam("id") Long id, Student student){
-        studentService.updateStudent(student);
-        if (student.getId() == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("Student do not exist.").type(MediaType.APPLICATION_JSON).build());
+        Student foundStudent = studentService.findStudentById(id);
+        if (foundStudent == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Student with ID " + id + " was not found.")
+                    .type(MediaType.APPLICATION_JSON).build();
         }
+        studentService.updateStudent(student);
         return Response.ok(student).build();
     }
 
