@@ -18,9 +18,11 @@ examples:
 Key:lastName Value:Hamilton
 --------------------------------------------------------------------------------
 PUT
-http://localhost:8080/student-management-system/api/v1/students/updateStudent/1
+http://localhost:8080/student-management-system/api/v1/students/updateStudent/1 
+(För att kolla om studenten finns i database, skulle studenteten finnas så skickar vi in det nya data)
 examples:
 {
+"id": 1,
 "firstName": "Sophia",
 "lastName": "Thomas",
 "email": "test@mail.com",
