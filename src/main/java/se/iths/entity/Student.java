@@ -28,6 +28,15 @@ public class Student {
 
     private String phoneNumber;
 
+    public Student(String firstName, String lastName, String email, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Student() {}
+
     public Long getId() {
         return id;
     }

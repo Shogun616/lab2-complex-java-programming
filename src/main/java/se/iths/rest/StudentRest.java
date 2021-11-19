@@ -26,7 +26,12 @@ public class StudentRest {
             studentService.addStudent(student);
             String msg = "Student with " + student.getEmail() + " has been added.";
             return Response.ok().entity(msg).build();
-        } else {
+        }
+        else if (student.getFirstName().isEmpty() || student.getLastName().isEmpty() || student.getEmail().isEmpty()){
+            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Missing data.").type(MediaType.APPLICATION_JSON).build());
+        }
+        else {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Invalid email")
                     .type(MediaType.APPLICATION_JSON).build();
