@@ -32,6 +32,3 @@ examples:
 DELETE
 http://localhost:8080/student-management-system/api/v1/students/deleteStudent/1
 -------------------------------------------------------------------------------
-
-Comment:
-Det största svårigheten med labbet är att skapa en fungerande felhantering för POST & Delete-metoden.

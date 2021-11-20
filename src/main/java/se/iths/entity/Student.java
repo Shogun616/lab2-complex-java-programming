@@ -32,7 +32,7 @@ public class Student {
     private List<Subject> subjects = new ArrayList<>();
 
     public void addSubject(Subject subject){
-        subject.add(subject);
+        subjects.add(subject);
         subject.setStudent(this);
     }
 
