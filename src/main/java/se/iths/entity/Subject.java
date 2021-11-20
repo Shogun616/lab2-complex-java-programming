@@ -13,10 +13,9 @@ public class Subject {
     private String category;
 
 
-    public Subject(String title, String category, Student student) {
+    public Subject(String title, String category) {
         this.title = title;
         this.category = category;
-        this.student = student;
     }
 
     public Subject(){}

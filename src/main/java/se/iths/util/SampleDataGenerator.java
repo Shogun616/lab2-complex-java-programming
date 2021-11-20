@@ -1,6 +1,8 @@
 package se.iths.util;
 
 import se.iths.entity.Student;
+import se.iths.entity.Subject;
+import se.iths.entity.Teacher;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -28,15 +30,29 @@ public class SampleDataGenerator {
         Student student9 = new Student("Veronika", "Smith", "veronika.smith@mail.com", "135684565");
         Student student10 = new Student("Albert", "Wesker", "albert.wesker@mail.com", "135684565");
 
-        entityManager.persist(student1);
-        entityManager.persist(student2);
-        entityManager.persist(student3);
-        entityManager.persist(student4);
-        entityManager.persist(student5);
-        entityManager.persist(student6);
-        entityManager.persist(student7);
-        entityManager.persist(student8);
-        entityManager.persist(student9);
-        entityManager.persist(student10);
+        Subject subject1 = new Subject("as", "Math & Statistics");
+        Subject subject2 = new Subject("sa", "Language");
+        Subject subject3 = new Subject("", "Religion & Philosophy");
+        Subject subject4 = new Subject("", "IT & Data Science");
+        Subject subject5 = new Subject("", "History");
+
+
+        Teacher teacher1 = new Teacher("", "", "", "");
+        Teacher teacher2 = new Teacher("", "", "", "");
+        Teacher teacher3 = new Teacher("", "", "", "");
+        Teacher teacher4 = new Teacher("", "", "", "");
+        Teacher teacher5 = new Teacher("", "", "", "");
+
+
+//        entityManager.persist(student1);
+//        entityManager.persist(student2);
+//        entityManager.persist(student3);
+//        entityManager.persist(student4);
+//        entityManager.persist(student5);
+//        entityManager.persist(student6);
+//        entityManager.persist(student7);
+//        entityManager.persist(student8);
+//        entityManager.persist(student9);
+//        entityManager.persist(student10);
     }
 }
