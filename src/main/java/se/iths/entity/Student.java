@@ -5,7 +5,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -28,12 +30,12 @@ public class Student {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<Subject> subjects = new ArrayList<>();
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
+    private Set<Subject> subjects = new HashSet<>();
 
     public void addSubject(Subject subject){
         subjects.add(subject);
-        subject.setStudent(this);
+        subject.getStudents().add(this);
     }
 
     public Student(String firstName, String lastName, String email, String phoneNumber) {
@@ -86,11 +88,11 @@ public class Student {
     }
 
     @JsonbTransient
-    public List<Subject> getSubjects(){
+    public Set<Subject> getSubjects(){
         return subjects;
     }
 
-    public void setSubjects(List<Subject> subjects){
+    public void setSubjects(Set<Subject> subjects){
         this.subjects = subjects;
     }
 }

@@ -1,8 +1,9 @@
 package se.iths.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-@NamedQuery(name = "subjectEntity.findAll", query = "select s from Subject s")
 @Entity
 public class Subject {
 
@@ -44,15 +45,15 @@ public class Subject {
         this.category = category;
     }
 
-    @ManyToOne
-    private Student student;
+    @ManyToMany
+    private Set<Student> students = new HashSet<Student>();
 
-    public Student getStudent(){
-        return student;
+    public Set<Student> getStudents() {
+        return students;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 
     @ManyToOne

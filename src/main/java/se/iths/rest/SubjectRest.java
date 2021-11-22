@@ -1,5 +1,6 @@
 package se.iths.rest;
 
+import se.iths.entity.Student;
 import se.iths.entity.Subject;
 import se.iths.service.SubjectService;
 
@@ -8,6 +9,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Path("subjects")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -15,7 +18,7 @@ import java.util.List;
 public class SubjectRest {
 
     @Inject
-    SubjectService subjectServices;
+    SubjectService subjectService;
 
     @Path("newSubject")
     @POST
@@ -24,7 +27,7 @@ public class SubjectRest {
          throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
                  .entity("Missing data.").type(MediaType.APPLICATION_JSON).build());
      }
-        subjectServices.addSubject(subject);
+        subjectService.addSubject(subject);
         String msg = "Subject " + subject.getTitle() + " has been added.";
         return Response.ok().entity(msg).build();
     }
@@ -32,7 +35,7 @@ public class SubjectRest {
     @Path("getSubject/{id}")
     @GET
     public Response getSubject(@PathParam("id") Long id){
-        Subject foundSubject = subjectServices.findSubjectById(id);
+        Subject foundSubject = subjectService.findSubjectById(id);
         if (foundSubject == null) {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                     .entity("Subject with ID " + id + " was not found.").type(MediaType.APPLICATION_JSON).build());
@@ -43,7 +46,22 @@ public class SubjectRest {
     @Path("getAllSubjects")
     @GET
     public Response getAllSubjects(){
-        List<Subject> foundSubjects = subjectServices.getAllSubjects();
+        List<Subject> foundSubjects = subjectService.getAllSubjects();
+        if (foundSubjects.isEmpty()) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("No Data available.").type(MediaType.APPLICATION_JSON).build());
+        }
+        return Response.ok(foundSubjects).build();
+    }
+
+    @Path("getSubjectsByCategory")
+    @GET
+    public Response getSubjectsByCategory(@QueryParam("category") String category){
+        List<Subject> foundSubjects = subjectService.getAllSubjects()
+                .stream()
+                .filter(subject -> Objects.equals(subject.getCategory(), category))
+                .collect(Collectors.toList());
+
         if (foundSubjects.isEmpty()) {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                     .entity("No Data available.").type(MediaType.APPLICATION_JSON).build());
@@ -54,26 +72,26 @@ public class SubjectRest {
     @Path("updateSubject/{id}")
     @PUT
     public Response updateSubject(@PathParam("id") Long id, Subject subject){
-        Subject foundSubject = subjectServices.findSubjectById(id);
+        Subject foundSubject = subjectService.findSubjectById(id);
         if (foundSubject == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Subject with ID " + id + " was not found.")
                     .type(MediaType.APPLICATION_JSON).build();
         }
-        subjectServices.updateSubject(subject);
+        subjectService.updateSubject(subject);
         return Response.ok(subject).build();
     }
 
     @Path("deleteSubject/{id}")
     @DELETE
     public Response deleteSubject(@PathParam("id") Long id){
-        Subject foundSubject = subjectServices.findSubjectById(id);
+        Subject foundSubject = subjectService.findSubjectById(id);
         if (foundSubject == null){
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Subject with ID " + id + " was not found.")
                     .type(MediaType.APPLICATION_JSON).build();
         }
-        subjectServices.deleteSubject(id);
+        subjectService.deleteSubject(id);
         String msg = "Subject with ID " + id + " has been removed.";
         return Response.ok().entity(msg).build();
     }
