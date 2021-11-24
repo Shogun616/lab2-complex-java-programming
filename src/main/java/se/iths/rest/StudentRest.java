@@ -1,6 +1,8 @@
 package se.iths.rest;
 
 import se.iths.entity.Student;
+import se.iths.exception.BadRequestException;
+import se.iths.exception.NotFoundException;
 import se.iths.exception.NotInvalidException;
 import se.iths.service.StudentService;
 
@@ -29,8 +31,7 @@ public class StudentRest {
             return Response.ok().entity(msg).build();
         }
         else if (student.getFirstName().isEmpty() || student.getLastName().isEmpty() || student.getEmail().isEmpty()){
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Missing data.").type(MediaType.APPLICATION_JSON).build());
+            throw new BadRequestException("Missing data.");
         }
         else {
             throw new NotInvalidException("Invalid email");
@@ -42,8 +43,7 @@ public class StudentRest {
     public Response getStudent(@PathParam("id") Long id){
         Student foundStudent = studentService.findStudentById(id);
         if (foundStudent == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("Student with ID " + id + " was not found.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("Student with ID " + id + " was not found.");
         }
         return Response.ok(foundStudent).build();
     }
@@ -53,8 +53,7 @@ public class StudentRest {
     public Response getAllStudents(){
         List<Student> foundStudents = studentService.getAllStudents();
         if (foundStudents.isEmpty()) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("No Data available.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("No data available.");
         }
         return Response.ok(foundStudents).build();
     }
@@ -68,8 +67,7 @@ public class StudentRest {
                 .collect(Collectors.toList());
 
         if (foundStudents.isEmpty()) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("No Data available.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("No data available.");
         }
         return Response.ok(foundStudents).build();
     }

@@ -1,6 +1,8 @@
 package se.iths.rest;
 
 import se.iths.entity.Teacher;
+import se.iths.exception.BadRequestException;
+import se.iths.exception.NotFoundException;
 import se.iths.exception.NotInvalidException;
 import se.iths.service.TeacherService;
 
@@ -29,8 +31,7 @@ public class TeacherRest {
             return Response.ok().entity(msg).build();
         }
         else if (teacher.getFirstName().isEmpty() || teacher.getLastName().isEmpty() || teacher.getEmail().isEmpty()){
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Missing data.").type(MediaType.APPLICATION_JSON).build());
+            throw new BadRequestException("Missing data.");
         }
         else {
             throw new NotInvalidException("Invalid email");
@@ -42,8 +43,7 @@ public class TeacherRest {
     public Response getTeacher(@PathParam("id") Long id){
         Teacher foundTeacher = teacherService.findTeacherById(id);
         if (foundTeacher == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("Teacher with ID " + id + " was not found.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("Teacher with ID " + id + " was not found.");
         }
         return Response.ok(foundTeacher).build();
     }
@@ -53,8 +53,7 @@ public class TeacherRest {
     public Response getAllTeachers(){
         List<Teacher> foundTeachers = teacherService.getAllTeachers();
         if (foundTeachers.isEmpty()) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("No Data available.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("No data available.");
         }
         return Response.ok(foundTeachers).build();
     }
@@ -68,8 +67,7 @@ public class TeacherRest {
                 .collect(Collectors.toList());
 
         if (foundTeachers.isEmpty()) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("No Data available.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("No data available.");
         }
         return Response.ok(foundTeachers).build();
     }
