@@ -1,6 +1,7 @@
 package se.iths.rest;
 
 import se.iths.entity.Teacher;
+import se.iths.exception.NotInvalidException;
 import se.iths.service.TeacherService;
 
 import javax.inject.Inject;
@@ -32,9 +33,7 @@ public class TeacherRest {
                     .entity("Missing data.").type(MediaType.APPLICATION_JSON).build());
         }
         else {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Invalid email")
-                    .type(MediaType.APPLICATION_JSON).build();
+            throw new NotInvalidException("Invalid email");
         }
     }
 
