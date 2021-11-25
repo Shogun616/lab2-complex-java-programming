@@ -7,7 +7,6 @@ import javax.ws.rs.core.Response;
 public class NotInvalidException extends WebApplicationException {
     public NotInvalidException(String message){
         super(Response.status(Response.Status.BAD_REQUEST)
-                .entity(message)
-                .type(MediaType.APPLICATION_JSON).build());
+                .entity(message).type(MediaType.APPLICATION_JSON).build());
     }
 }
