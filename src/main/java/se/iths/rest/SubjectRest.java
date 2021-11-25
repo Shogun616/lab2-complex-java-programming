@@ -1,7 +1,8 @@
 package se.iths.rest;
 
-import se.iths.entity.Student;
 import se.iths.entity.Subject;
+import se.iths.exception.BadRequestException;
+import se.iths.exception.NotFoundException;
 import se.iths.service.SubjectService;
 
 import javax.inject.Inject;
@@ -24,8 +25,7 @@ public class SubjectRest {
     @POST
     public Response addSubject(Subject subject){
      if (subject.getTitle().isEmpty() || subject.getCategory().isEmpty()){
-         throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-                 .entity("Missing data.").type(MediaType.APPLICATION_JSON).build());
+         throw new BadRequestException("Missing data.");
      }
         subjectService.addSubject(subject);
         String msg = "Subject " + subject.getTitle() + " has been added.";
@@ -37,8 +37,7 @@ public class SubjectRest {
     public Response getSubject(@PathParam("id") Long id){
         Subject foundSubject = subjectService.findSubjectById(id);
         if (foundSubject == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("Subject with ID " + id + " was not found.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("Subject with ID " + id + " was not found.");
         }
         return Response.ok(foundSubject).build();
     }
@@ -48,8 +47,7 @@ public class SubjectRest {
     public Response getAllSubjects(){
         List<Subject> foundSubjects = subjectService.getAllSubjects();
         if (foundSubjects.isEmpty()) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("No Data available.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("No Data available.");
         }
         return Response.ok(foundSubjects).build();
     }
@@ -63,8 +61,7 @@ public class SubjectRest {
                 .collect(Collectors.toList());
 
         if (foundSubjects.isEmpty()) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("No Data available.").type(MediaType.APPLICATION_JSON).build());
+            throw new NotFoundException("No Data available.");
         }
         return Response.ok(foundSubjects).build();
     }
